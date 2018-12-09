@@ -26,3 +26,5 @@ Please type `npm start` or `yarn start` to run API
 npm start // run app first
 npm test // execute e2e tests
 ```
+
+![Test result](https://github.com/uro-pja/node-calculator/blob/master/scr.png)

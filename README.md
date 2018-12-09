@@ -1,5 +1,7 @@
 # Node.js calculator API without express.js
 
+Created for TIN PJA, estimated time: 30 mins.
+
 ## Preparation
 
 1. Install Node & NPM

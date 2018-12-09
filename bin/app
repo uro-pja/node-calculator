@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+
+var http = require('http');
+var url = require('url');
+var calc = require('../app/calculator');
+
+http.createServer(function (req, res) {
+    var path = url.parse(req.url, true).pathname;
+    var query = url.parse(req.url, true).query;
+
+    var responseCode = 404;
+    var responseData = {
+        status: 'error',
+        message: 'path not found'
+    };
+
+    switch (path) {
+        case '/add':
+            responseCode = handleRequest(responseData, query, function (first, last) {
+                return calc.add(first, last);
+            });
+            break;
+        case '/sub':
+            responseCode = handleRequest(responseData, query, function (first, last) {
+                return calc.sub(first, last);
+            });
+            break;
+        case '/div':
+            responseCode = handleRequest(responseData, query, function (first, last) {
+                return calc.div(first, last);
+            });
+            break;
+        case '/mul':
+            responseCode = handleRequest(responseData, query, function (first, last) {
+                return calc.mul(first, last);
+            });
+            break;
+
+    }
+
+    res.writeHead(responseCode, {'Content-Type': 'application/json'});
+    res.end(JSON.stringify(responseData));
+
+}).listen(3001, function () {
+    console.log("server start at port 3000");
+});
+
+function handleRequest(responseData, query, callback) {
+    var responseCode = 200;
+
+    try {
+        responseData.status = 'ok';
+        responseData.message = callback(query.first, query.last);
+    } catch (e) {
+        responseCode = 400;
+        responseData.status = 'error';
+        responseData.message = e.message;
+    }
+    return responseCode;
+}
